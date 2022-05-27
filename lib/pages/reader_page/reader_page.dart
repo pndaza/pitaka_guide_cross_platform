@@ -4,9 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../data/basic_state.dart';
 import '../../models/topic.dart';
-import '../../packages/pdf_viewer/pdf_controller.dart';
-import '../../packages/pdf_viewer/pdf_page_view.dart';
-import '../../packages/pdf_viewer/pdf_viewer.dart';
+import '../../packages/pdf_render/assets_pdf_viewer.dart';
 import '../../repositories/favourite_repo.dart';
 import '../../widgets/multi_value_listenable_builder.dart';
 import 'reader_view_controller.dart';
