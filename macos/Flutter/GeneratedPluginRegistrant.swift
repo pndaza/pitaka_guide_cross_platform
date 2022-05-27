@@ -6,11 +6,11 @@ import FlutterMacOS
 import Foundation
 
 import device_info_plus_macos
-import pdfx
+import native_pdf_renderer
 import shared_preferences_macos
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   DeviceInfoPlusMacosPlugin.register(with: registry.registrar(forPlugin: "DeviceInfoPlusMacosPlugin"))
-  PdfxPlugin.register(with: registry.registrar(forPlugin: "PdfxPlugin"))
+  NativePdfRendererPlugin.register(with: registry.registrar(forPlugin: "NativePdfRendererPlugin"))
   SharedPreferencesPlugin.register(with: registry.registrar(forPlugin: "SharedPreferencesPlugin"))
 }

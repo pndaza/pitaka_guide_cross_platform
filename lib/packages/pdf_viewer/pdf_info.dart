@@ -1,11 +1,11 @@
 
-import 'package:pdfx/pdfx.dart';
+import 'package:native_pdf_renderer/native_pdf_renderer.dart';
 
 class PdfInfo {
   PdfDocument document;
   int pageCount;
-  double width;
-  double height;
+  int width;
+  int height;
   PdfInfo(
     this.document,
     this.pageCount,

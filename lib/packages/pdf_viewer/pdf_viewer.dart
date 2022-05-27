@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:pdfx/pdfx.dart';
+import 'package:native_pdf_renderer/native_pdf_renderer.dart';
 import 'package:vs_scrollbar/vs_scrollbar.dart';
 import 'dart:io';
 
-import 'pdf_controller.dart' as my_pdf_controller;
+import 'pdf_controller.dart';
 import 'pdf_info.dart';
 import 'pdf_page_view.dart';
 
@@ -12,7 +12,7 @@ typedef OnPageChanged = void Function(int);
 class AssetPdfViewer extends StatefulWidget {
   final String assetPath;
   final Axis scrollDirection;
-  final my_pdf_controller.PdfController? pdfController;
+  final PdfController? pdfController;
   final OnPageChanged? onPageChanged;
   final ColorMode? colorMode;
 
@@ -31,26 +31,11 @@ class AssetPdfViewer extends StatefulWidget {
 
 class _AssetPdfViewerState extends State<AssetPdfViewer> {
   ScrollController? _scrollController;
-  late final Future<PdfInfo> pdfInfo;
-  late final int initialPage;
-
-  @override
-  void initState() {
-    super.initState();
-    pdfInfo = _loadPdf(widget.assetPath);
-    initialPage = widget.pdfController?.intialPage ?? 1;
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    pdfInfo.then((value) => value.document.close());
-  }
 
   @override
   Widget build(BuildContext context) {
-    // final pdfInfo = _loadPdf(widget.assetPath);
-    // final initialPage = widget.pdfController?.intialPage ?? 1;
+    final pdfInfo = _loadPdf(widget.assetPath);
+    final initialPage = widget.pdfController?.intialPage ?? 1;
 
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
@@ -104,7 +89,6 @@ class _AssetPdfViewerState extends State<AssetPdfViewer> {
         child: PageView.builder(
             controller: _scrollController as PageController,
             scrollDirection: widget.scrollDirection,
-            allowImplicitScrolling: true,
             pageSnapping:
                 widget.scrollDirection == Axis.horizontal ? true : false,
             onPageChanged: (index) => widget.onPageChanged?.call(index + 1),
@@ -141,8 +125,8 @@ class _AssetPdfViewerState extends State<AssetPdfViewer> {
       {required Axis scrollAxis,
       required double parentWidth,
       required double parentHeight,
-      required double pdfWidth,
-      required double pdfHeight}) {
+      required int pdfWidth,
+      required int pdfHeight}) {
     if (scrollAxis == Axis.horizontal) {
       return 1.0;
     }

@@ -452,6 +452,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
+  native_pdf_renderer:
+    dependency: "direct main"
+    description:
+      name: native_pdf_renderer
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.1"
   nested:
     dependency: transitive
     description:
@@ -494,13 +501,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.6"
-  pdfx:
-    dependency: "direct main"
-    description:
-      name: pdfx
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.1+2"
   petitparser:
     dependency: transitive
     description:
@@ -508,13 +508,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.4.0"
-  photo_view:
-    dependency: transitive
-    description:
-      name: photo_view
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.13.0"
   platform:
     dependency: transitive
     description:

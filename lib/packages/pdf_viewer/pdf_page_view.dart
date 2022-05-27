@@ -1,7 +1,5 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
-import 'package:pdfx/pdfx.dart';
+import 'package:native_pdf_renderer/native_pdf_renderer.dart';
 
 enum ColorMode { day, night, speia, grayscale }
 Map<ColorMode, List<double>> _predefinedFilters = {
@@ -35,77 +33,74 @@ Map<ColorMode, List<double>> _predefinedFilters = {
   ],
 };
 
-class PdfPageView extends StatefulWidget {
+class PdfPageView extends StatelessWidget {
   final PdfDocument pdfDocument;
   final int pageNumber;
   final ColorMode colorMode;
-  final double renderWidth;
   const PdfPageView({
     Key? key,
     required this.pdfDocument,
     required this.pageNumber,
     required this.colorMode,
-    this.renderWidth = 1500.0,
   }) : super(key: key);
 
   @override
-  State<PdfPageView> createState() => _PdfPageViewState();
-}
-
-class _PdfPageViewState extends State<PdfPageView> {
-  late Future<Uint8List?> byteImage;
-
-  @override
-  void initState() {
-    super.initState();
-    byteImage = _loadPageImage(widget.renderWidth);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Uint8List?>(
-        future: byteImage,
-        builder: (context, snapShot) {
-          if (!snapShot.hasData) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
+    return LayoutBuilder(builder: (context, boxConstraints) {
+      return FutureBuilder<PdfPage>(
+          future: pdfDocument.getPage(pageNumber),
+          builder: (context, snapShot) {
+            if (!snapShot.hasData) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            final PdfPage pdfPage = snapShot.data!;
+            final scaleFactor =
+                _getScaleFactor(width: pdfPage.width, widthToRender: 1600);
 
-          if (snapShot.data == null) {
-            return const Center(
-              child: Text('something wrong'),
-            );
-          }
-          return ColorFiltered(
-            colorFilter:
-                ColorFilter.matrix(_predefinedFilters[widget.colorMode]!),
-            child: Image(
-              fit: BoxFit.contain,
-              image: MemoryImage(snapShot.data!),
-            ),
-          );
-        });
+            return FutureBuilder<PdfPageImage?>(
+                future: pdfPage.render(
+                  width: (pdfPage.width * scaleFactor).floor(),
+                  height: (pdfPage.height * scaleFactor).floor(),
+                ),
+                builder: (context, snapShot) {
+                  if (!snapShot.hasData) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+
+                  if (snapShot.data == null) {
+                    return const Center(
+                      child: Text('something wrong'),
+                    );
+                  }
+                  final PdfPageImage pdfPageImage = snapShot.data!;
+                  return ColorFiltered(
+                    colorFilter:
+                        ColorFilter.matrix(_predefinedFilters[colorMode]!),
+                    child: Image(
+                      fit: BoxFit.contain,
+                      image: MemoryImage(pdfPageImage.bytes),
+                    ),
+                  );
+                });
+          });
+    });
   }
-
-  Future<Uint8List?> _loadPageImage(double maxWidth) async {
-    final pdfPage = await widget.pdfDocument.getPage(widget.pageNumber);
+/*
+  void _loadPageImage(double maxWidth) async {
+    final pdfPage = await pdfDocument.getPage(pageNumber);
     final scaleFactor =
         _getScaleFactor(width: pdfPage.width, widthToRender: maxWidth);
     final pdfImage = await pdfPage.render(
-      width: (pdfPage.width * scaleFactor),
-      height: (pdfPage.height * scaleFactor),
-    );
+        width: (pdfPage.width * scaleFactor).floor(),
+        height: (pdfPage.height * scaleFactor).floor());
     pdfPage.close();
-    return pdfImage?.bytes;
   }
+*/
 
-  double _getScaleFactor(
-          {required double width, required double widthToRender}) =>
+  double _getScaleFactor({required int width, required double widthToRender}) =>
       double.parse((widthToRender / width).toStringAsFixed(2));
 }
