@@ -55,9 +55,15 @@ flutter:
 
 flutter_icons:
   android: true
-  ios: true
-  remove_alpha_ios: true
+  adaptive_icon_background: '#851401'
+  adaptive_icon_foreground: 'assets/icon/pitaka_guide.png'
+  # ios: true
+  # remove_alpha_ios: true
+  # macos: true
+  # remove_alpha_macos: true
+  # windows: true
   image_path: "assets/icon/pitaka_guide.png"
+  adaptive_icon_round: "assets/icon/pitaka_guide.png"
 
 flutter_native_splash:
   color: "#a73800"
