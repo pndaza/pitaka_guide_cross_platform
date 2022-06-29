@@ -6,7 +6,7 @@ import '../../data/basic_state.dart';
 import '../../data/constants.dart';
 import '../../data/shared_pref_client.dart';
 import '../../models/favourite.dart';
-import '../../packages/pdf_render/assets_pdf_viewer.dart';
+import '../../packages/native_pdf_renderer/assets_pdf_viewer.dart';
 import '../../repositories/favourite_repo.dart';
 
 class ReaderViewController {
