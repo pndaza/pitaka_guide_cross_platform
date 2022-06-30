@@ -4,6 +4,7 @@ project(pitakaguide LANGUAGES CXX)
 
 # The name of the executable created for the application. Change this to change
 # the on-disk name of your application.
+set(PDFIUM_VERSION "4634" CACHE STRING "")
 set(BINARY_NAME "pitakaguide")
 
 # Explicitly opt in to modern CMake behaviors to avoid warnings with recent
